@@ -36,3 +36,6 @@ def account_req():
     res = requests.get(server_url + "/v1/accounts", headers=headers)
     print(res.json())
     return(res.json())
+
+
+def init

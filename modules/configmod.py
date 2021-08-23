@@ -37,6 +37,9 @@ def init_config():
     cfg['keys']['access_key'] = 'YOUR_ACCESS_KEY'
     cfg['keys']['secret_key'] = 'YOUR_SECRET_KEY'
     cfg['keys']['server_url'] = 'https://api.upbit.com'
+    cfg['system'] = {}
+    cfg['system']['black_list']='DOGE'
+
     with open(file_cfg, 'w', encoding='utf-8') as configfile:
         cfg.write(configfile)
 
@@ -46,7 +49,7 @@ def version_read():
     data.read(file_ifd, encoding='utf-8')
     title = data['info']['title']
     ver = data['info']['version']
-    msg=title + ' ' + ver + ' is running '
+    msg=title + ' ' + ver + ' is running.'
     lgm.logmsg(msg,'info')
 
 
