@@ -1,1 +1,1 @@
-# upbit_trader
+# CordiumUpbitTrader
