@@ -38,8 +38,11 @@ def init_config():
     cfg['keys']['secret_key'] = 'YOUR_SECRET_KEY'
     cfg['keys']['server_url'] = 'https://api.upbit.com'
     cfg['system'] = {}
-    cfg['system']['black_list']='DOGE'
-
+    cfg['system']['white_list']='BTC,ETH,XRP,ETC,OMG,ZEC,XMR,XLM,ADA,EOS,ONT,MFT,BAT,LOOM,BCH,ZIL,IOST'
+    cfg['system']['growth_period']='3'
+    cfg['system']['max_per_coin']='15000'
+    cfg['system']['max_watchlist']='4'
+    cfg['system']['term']='0.002'
     with open(file_cfg, 'w', encoding='utf-8') as configfile:
         cfg.write(configfile)
 

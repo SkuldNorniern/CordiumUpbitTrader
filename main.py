@@ -5,7 +5,7 @@ from modules import configmod as cfm
 
 
 lgm.init()
-lgm.logmsg('initlizing logger module finished.','debug')
+lgm.logmsg('Initlizing logger module finished.','debug')
 cfm.init()
 lgm.logmsg('Initlizling data module finished.','debug')
 cfm.version_read()
