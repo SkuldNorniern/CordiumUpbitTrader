@@ -1,15 +1,15 @@
 import logging
-logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s',filename='../latest.log',filemode='w',datefmt='%m/%d/%Y %I:%M:%S', level=logging.DEBUG)
+logging.basicConfig(format='[%(asctime)s] [%(levelname)s] %(message)s',filename='latest.log',filemode='w',datefmt='%m/%d/%Y %I:%M:%S', level=logging.DEBUG)
 
 console = logging.StreamHandler()
-console.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s')
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s',datefmt='%m/%d/%Y %I:%M:%S')
 console.setFormatter(formatter)
 logging.getLogger().addHandler(console)
 
 
 def init():
-    logmsg('Initlizing logger module.','debug')
+    logmsg('Initlizing logger module.','info')
 
 def logmsg(msg, uglvl):
     if uglvl == 'debug':

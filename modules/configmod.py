@@ -1,9 +1,10 @@
 import configparser
 from modules import loggermod as lgm
+from modules import datasetmod as dsm
 from time import strftime
 import os.path
-file_ifd = '../infodata.dat'
-file_cfg = '../config.cfg'
+file_ifd = 'infodata.dat'
+file_cfg = 'config.cfg'
 
 
 def init():
@@ -37,8 +38,11 @@ def init_config():
     cfg['keys']['access_key'] = 'YOUR_ACCESS_KEY'
     cfg['keys']['secret_key'] = 'YOUR_SECRET_KEY'
     cfg['keys']['server_url'] = 'https://api.upbit.com'
+    cfg['keys']['telegram_token'] = 'YOUR_TELEGRAM_TOKEN'
+    cfg['keys']['telegram_mc'] = 'YOUR_TELEGRAM_MC'
     cfg['system'] = {}
-    cfg['system']['white_list']='BTC,ETH,XRP,ETC,OMG,ZEC,XMR,XLM,ADA,EOS,ONT,MFT,BAT,LOOM,BCH,ZIL,IOST'
+    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,OMG,ZEC,XMR,XLM,ADA,EOS,ONT,MFT,BAT,LOOM,BCH,ZIL,IOST'
+    cfg['system']['whitelist_is_updated']='1'
     cfg['system']['growth_period']='3'
     cfg['system']['max_per_coin']='15000'
     cfg['system']['max_watchlist']='4'
@@ -62,4 +66,26 @@ def keys_read():
     ack = cfg['keys']['access_key']
     sck = cfg['keys']['secret_key']
     svu = cfg['keys']['server_url']
-    return (ack,sck,svu)
+    tgt = cfg['keys']['telegram_token']
+    tgm = cfg['keys']['telegram_mc']
+    return (ack,sck,svu,tgt,tgm)
+
+
+def whitelist_read():
+    cfg = configparser.ConfigParser()
+    cfg.read(file_cfg, encoding='utf-8')
+    whl = cfg['system']['whitelist']
+    return whl
+
+def isupdated_read():
+    cfg = configparser.ConfigParser()
+    cfg.read(file_cfg, encoding='utf-8')
+    wiu = cfg['system']['whitelist_is_updated']
+    return wiu
+
+def isupdated_write():
+    cfg = configparser.ConfigParser()
+    cfg.read(file_cfg, encoding='utf-8')
+    cfg.set('system','whitelist_is_updated','0')
+    with open(file_cfg, 'w', encoding='utf-8') as configfile:
+        cfg.write(configfile)
