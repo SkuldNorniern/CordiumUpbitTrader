@@ -18,6 +18,7 @@ import requests
 access_key = ''
 secret_key = ''
 server_url = ''
+
 coin_list = []
 upbit = ''
 token = ''
@@ -38,7 +39,7 @@ prices = 0
 save1 = True
 save2 = True
 save3 = True
-time_save = True
+
 krw_balance = 0
 now = 0
 prev_day = 0
@@ -76,30 +77,14 @@ def init_account():
         lgm.logmsg(msg,'debug')
         bot=telegram.Bot(token)
         bot.sendMessage(mc,'Auto Trader Online')
-        
+
     lgm.logmsg('Sended message from telegram bot','info')
     pyupbit.Upbit(access_key, secret_key)
     whl = cfm.whitelist_read()
     coin_list = whl.split(',')
     msg='whitelist '+whl+ ' loaded.'
     lgm.logmsg(msg,'info')
-    n=len(coin_list)
-
-    percent_list = [0.05]*n
-    INF = 1000000000000
-    money_list = [0]*(n)
-    op_mode = [False] * (n) # 당일 9시에 코드를 시작하지 않았을 경우를 위한 변수
-    hold = [False] * (n) # 해당 코인을 가지고 있는지
-    target = [INF]*(n)
-    prices = [-1]*(n)
-    save1 = True
-    save2 = True
-    save3 = True
-    time_save = True
-    krw_balance = 0
-    now = datetime.now(timezone('Asia/Seoul'))
-    prev_day = now.day
-    yesterday_ma15 = [0]*(n)
+    trader(access_key,secret_key,server_url,token,mc)
 
 
 #def account_req():
@@ -117,14 +102,23 @@ def init_account():
 
 def cal_target(ticker):
     # time.sleep(0.1)
+    access_key,secret_key,server_url,token,mc = cfm.keys_read()
+    bot=telegram.Bot(token)
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
     df_cal_target = pyupbit.get_ohlcv(ticker, "day")
     yesterday = df_cal_target.iloc[-2]
     today = df_cal_target.iloc[-1]
     yesterday_range = yesterday['high'] - yesterday['low']
     target = today['open'] + yesterday_range * 0.5
     return target
+
 def sell(ticker):
     # time.sleep(0.1)
+    access_key,secret_key,server_url,token,mc = cfm.keys_read()
+    bot=telegram.Bot(token)
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
     balance = upbit.get_balance(ticker)
     s = upbit.sell_market_order(ticker, balance)
     msg = str(ticker)+"매도 시도"+"\n"+json.dumps(s, ensure_ascii = False)
@@ -132,6 +126,10 @@ def sell(ticker):
     bot.sendMessage(mc,msg)
 def buy(ticker, money):
     # time.sleep(0.1)
+    access_key,secret_key,server_url,token,mc = cfm.keys_read()
+    bot=telegram.Bot(token)
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
     b = upbit.buy_market_order(ticker, money)
     try:
         if b['error']:
@@ -141,13 +139,25 @@ def buy(ticker, money):
         msg = str(ticker)+" "+str(money)+"원 매수시도"+"\n"+json.dumps(b, ensure_ascii = False)
     print(msg)
     bot.sendMessage(mc,msg)
+
 def printall():
-    msg = f"------------------------------{now.strftime('%Y-%m-%d %H:%M:%S')}------------------------------\n"
+    #msg = f"------------------------------{now.strftime('%Y-%m-%d %H:%M:%S')}------------------------------\n"
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
+    msg="lol"
+    n=len(coin_list)
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
     for i in range(n):
         msg += f"{'%10s'%coin_list[i]} 목표가: {'%11.1f'%target[i]} 현재가: {'%11.1f'%prices[i]} 매수금액: {'%7d'%money_list[i]} hold: {'%5s'%hold[i]} status: {op_mode[i]}\n"
-    print(msg)
+    lgm.logmsg(msg,'info')
+
 def save_data(krw_balance): # 만약 존버했을 경우와 비교를 하는 함수
     # 자신이 존버를 할 거라고 생각을 하고 해당 코인을 얼마나 가지고 있을 예정인지 변수 설정
+    access_key,secret_key,server_url,token,mc = cfm.keys_read()
+    bot=telegram.Bot(token)
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
     own_coin_list_04_08 = [
         0, # BTC 만약 자신이 존버를 할 경우 가지고 있을 법한 비트코인 개수
         0, # ETH
@@ -178,7 +188,11 @@ def save_data(krw_balance): # 만약 존버했을 경우와 비교를 하는 함
         df2.to_csv('saved_data.csv', mode='a', header=False)
     print(msg)
     bot.sendMessage(mc,msg)
+
 def get_yesterday_ma15(ticker):
+    access_key,secret_key,server_url,token,mc = cfm.keys_read()
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
     df_get_yesterday_ma15 = pyupbit.get_ohlcv(ticker)
     close = df_get_yesterday_ma15['close']
     ma = close.rolling(window=5).mean()
@@ -187,7 +201,30 @@ def get_yesterday_ma15(ticker):
 
 
 
-def trader():
+def trader(access_key,secret_key,server_url,token,mc):
+    whl = cfm.whitelist_read()
+    coin_list = whl.split(',')
+    n=len(coin_list)
+    for i in range(n):
+        coin_list[i]='KRW-'+coin_list[i]
+    percent_list = [0.10]*n
+    INF = 1000000000000
+    money_list = [0]*(n)
+    op_mode = [False] * (n) # 당일 9시에 코드를 시작하지 않았을 경우를 위한 변수
+    hold = [False] * (n) # 해당 코인을 가지고 있는지
+    target = [INF]*(n)
+    prices = [-1]*(n)
+    save1 = True
+    save2 = True
+    save3 = True
+    krw_balance = 0
+    now = datetime.now(timezone('Asia/Seoul'))
+    prev_day = now.day
+    yesterday_ma15 = [0]*(n)
+    time_save = True
+    bot=telegram.Bot(token)
+    upbit = pyupbit.Upbit(access_key, secret_key)
+
     for i in range(n):
         target[i] = df.loc[i,'target']
         money_list[i] = df.loc[i,'money_list']
@@ -219,7 +256,6 @@ def trader():
                 msg = "코드가 정상 실행 중입니다."
                 bot.sendMessage(mc,msg)
                 save3 = False
-
 
             # 매도 시도
             if now.hour == 8 and now.minute == 59 and save1:

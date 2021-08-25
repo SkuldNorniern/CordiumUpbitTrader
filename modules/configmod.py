@@ -41,7 +41,7 @@ def init_config():
     cfg['keys']['telegram_token'] = 'YOUR_TELEGRAM_TOKEN'
     cfg['keys']['telegram_mc'] = 'YOUR_TELEGRAM_MC'
     cfg['system'] = {}
-    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,OMG,ZEC,XMR,XLM,ADA,EOS,ONT,MFT,BAT,LOOM,BCH,ZIL,IOST'
+    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,XLM,ADA,EOS,BCH,GAS,FLOW,ETC,ZIL'
     cfg['system']['whitelist_is_updated']='1'
     cfg['system']['growth_period']='3'
     cfg['system']['max_per_coin']='15000'
