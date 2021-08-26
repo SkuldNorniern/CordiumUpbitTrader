@@ -46,7 +46,16 @@ def trader():
         own_coin_list_04_08 = [
             0, # BTC 만약 자신이 존버를 할 경우 가지고 있을 법한 비트코인 개수
             0, # ETH
-            0 # DOGE
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
         ]
         df_saved_data = pd.read_csv('saved_data.csv')
         now_prices = [-1]*(n)
@@ -84,6 +93,8 @@ def trader():
     access,secret,server_url,token,mc = cfm.keys_read()
     upbit = pyupbit.Upbit(access, secret)
     bot = telegram.Bot(token)
+    bot.sendMessage(mc,'Auto Trader Online')
+    lgm.logmsg('Sended message from telegram bot','info')
     df = pd.read_csv('dataset.csv')
     df2 = pd.DataFrame(columns=['date','jonbeo','auto_upbit','difference_jonbeo_autoupbit'])
 
@@ -110,7 +121,6 @@ def trader():
     now = datetime.now(timezone('Asia/Seoul'))
     prev_day = now.day
     yesterday_ma15 = [0]*(n)
-
 
 
     for i in range(n):
@@ -220,6 +230,8 @@ def trader():
                     df.loc[i, 'hold'] = True
                     df.to_csv('dataset.csv', index=None)
                     print('----------매수 완료------------')
+                    msg= 'Bought '+coin_list[i]
+                    bot.sendMessage(mc,msg)
 
             # 상태 출력
             printall()
