@@ -9,7 +9,7 @@ logging.getLogger().addHandler(console)
 
 
 def init():
-    logmsg('Initlizing logger module.','info')
+    logmsg('Initialing logger module.','info')
 
 def logmsg(msg, uglvl):
     if uglvl == 'debug':

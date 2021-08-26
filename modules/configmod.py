@@ -5,10 +5,10 @@ from time import strftime
 import os.path
 file_ifd = 'infodata.dat'
 file_cfg = 'config.cfg'
-
+file_sdv = 'saved_data.csv'
 
 def init():
-    lgm.logmsg('Start initlizling data module','debug')
+    lgm.logmsg('Start Initialing data module','debug')
     if os.path.exists(file_ifd):
         lgm.logmsg('Infodata Detected Continue to boot.','info')
     else:
@@ -20,7 +20,11 @@ def init():
     else:
         lgm.logmsg('Generating configuration file.','warn')
         init_config()
-
+    if os.path.exists(file_sdv):
+        lgm.logmsg('saved_data Detected Continue to boot.','info')
+    else:
+        lgm.logmsg('Generating save_data file.','warn')
+        dsm.init_savedata()
 
 def init_infodata():
     data = configparser.ConfigParser()
