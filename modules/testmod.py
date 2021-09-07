@@ -9,6 +9,7 @@ from dotenv import load_dotenv # pip install python-dotenv
 import os
 from modules import loggermod as lgm
 from modules import configmod as cfm
+
 def trader():
     def cal_target(ticker):
         # time.sleep(0.1)
@@ -43,20 +44,7 @@ def trader():
         lgm.logmsg(msg,'info')
     def save_data(krw_balance): # 만약 존버했을 경우와 비교를 하는 함수
         # 자신이 존버를 할 거라고 생각을 하고 해당 코인을 얼마나 가지고 있을 예정인지 변수 설정
-        own_coin_list_04_08 = [
-            0, # BTC 만약 자신이 존버를 할 경우 가지고 있을 법한 비트코인 개수
-            0, # ETH
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-        ]
+        own_coin_list_04_08 = [0]*(n)
         df_saved_data = pd.read_csv('saved_data.csv')
         now_prices = [-1]*(n)
         jonbeo = "----------들고만 있었으면----------\n"
