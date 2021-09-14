@@ -179,7 +179,7 @@ def trader():
                         msg="%s 가 이미 %d 원 만큼 매수되어있어 매수하지 않습니다."%(coins[i],amount)
                         lgm.logmsg(msg,'info')
                         bot.sendMessage(mc,msg)
-                    elif  dsm.watching_list()-1>max_watchlist:
+                    elif  dsm.watching_list()>max_watchlist:
                         msg="설정한 동시 거래수 %d 개에 도달해 더이상 구매하지 않습니다."%(max_watchlist)
                         lgm.logmsg("msg,"'info')
                         bot.sendMessage(mc,msg)
