@@ -133,8 +133,9 @@ def trader():
     lgm.logmsg(msg,'info')
 
     bot=telegram.Bot(token)
-    sysdt = cfm.system_read()
-    buy_percent,max_per_coin,max_watchlist=sysdt;
+    buy_percent,max_per_coin,max_watchlist,real_trade=cfm.system_read()
+    if real_trade=='True' : real_trade=True
+    else : real_trade=False
     buy_percent=float(buy_percent)
     max_per_coin=int(max_per_coin)
     max_watchlist=int(max_watchlist)
@@ -143,17 +144,15 @@ def trader():
         coin_list[i]='KRW-'+coin_list[i]
         coin_list[i]=str(coin_list[i])
         coins[i]=str(coins[i])
-    tt=False
+    tt=True
     while True:
         try:
             now = datetime.datetime.now()
-            if (now.hour % 3) == 0 and tt==False:
+            if (now.hour % 3) == 0 and tt==False and now.minute==0:
                 tt=True
                 msg = f"지금 {now.hour}시입니다. 코드가 잘 실행되고 있습니다."
                 lgm.logmsg(msg,'info')
                 bot.sendMessage(mc,msg)
-            elif ((now.hour % 3)+1) == now.hour and tt==True:
-                tt=False
             krw = get_balance('KRW')
             msg='Balance Loaded : %d'%(krw)
             lgm.logmsg(msg,'info')
@@ -174,7 +173,7 @@ def trader():
                             msg="%s 의 15일 이동평균선이 60일 이동평균선을 넘어섰으므로 %d 원을 매수 합니다."%(coins[i],monyy)
                             lgm.logmsg(msg,'info')
                             bot.sendMessage(mc,msg)
-                #            upbit.buy_market_order(coin_list[i], krw*buy_percent)
+                            if real_trade==True:  upbit.buy_market_order(coin_list[i], krw*buy_percent)
                             dsm.report_update(now,coins[i],"buy",monyy,"N/A",krw-monyy)
                     elif monyy>max_per_coin-amount:
                         msg="%s 가 이미 %d 원 만큼 매수되어있어 매수하지 않습니다."%(coins[i],amount)
@@ -200,6 +199,7 @@ def trader():
                 if(tt==True): bot.sendMessage(mc,msg)
                 if amount>0: dsm.data_update(coins[i],round(amount),round(coin))
                 time.sleep(1)
+            tt=False
             time.sleep(45)
 
         except Exception as e:

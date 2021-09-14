@@ -40,6 +40,7 @@ def init_config():
     cfg['keys']['telegram_mc'] = 'YOUR_TELEGRAM_MC'
     cfg['system'] = {}
     cfg['system']['whitelist']='BTC,ETH,XRP,ETC,XLM,ADA,BCH,GAS'
+    cfg['system']['real_trade']='False'
     cfg['system']['buy_percent']='0.1'
     cfg['system']['max_per_coin']='15000'
     cfg['system']['max_watchlist']='4'
@@ -72,7 +73,8 @@ def system_read():
     buyp = cfg['system']['buy_percent']
     mpc = cfg['system']['max_per_coin']
     mxw = cfg['system']['max_watchlist']
-    return (buyp,mpc,mxw)
+    rlt= cfg['system']['real_trade']
+    return (buyp,mpc,mxw,rlt)
 
 def whitelist_read():
     cfg = configparser.ConfigParser()
