@@ -1,14 +1,13 @@
 import configparser
 from modules import loggermod as lgm
-from modules import datasetmod as dsm
+#from modules import datasetmod as dsm
 from time import strftime
 import os.path
 file_ifd = 'infodata.dat'
 file_cfg = 'config.cfg'
-file_sdv = 'saved_data.csv'
 
 def init():
-    lgm.logmsg('Start Initialing data module','debug')
+    lgm.logmsg('Start Initialing config module','debug')
     if os.path.exists(file_ifd):
         lgm.logmsg('Infodata Detected Continue to boot.','info')
     else:
@@ -20,11 +19,6 @@ def init():
     else:
         lgm.logmsg('Generating configuration file.','warn')
         init_config()
-    if os.path.exists(file_sdv):
-        lgm.logmsg('saved_data Detected Continue to boot.','info')
-    else:
-        lgm.logmsg('Generating save_data file.','warn')
-        dsm.init_savedata()
 
 def init_infodata():
     data = configparser.ConfigParser()
@@ -45,12 +39,10 @@ def init_config():
     cfg['keys']['telegram_token'] = 'YOUR_TELEGRAM_TOKEN'
     cfg['keys']['telegram_mc'] = 'YOUR_TELEGRAM_MC'
     cfg['system'] = {}
-    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,XLM,ADA,EOS,BCH,GAS,FLOW,ETC'
-    cfg['system']['whitelist_is_updated']='1'
+    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,XLM,ADA,BCH,GAS'
     cfg['system']['buy_percent']='0.1'
     cfg['system']['max_per_coin']='15000'
     cfg['system']['max_watchlist']='4'
-    cfg['system']['term']='0.002'
     with open(file_cfg, 'w', encoding='utf-8') as configfile:
         cfg.write(configfile)
 
@@ -78,23 +70,12 @@ def system_read():
     cfg = configparser.ConfigParser()
     cfg.read(file_cfg, encoding='utf-8')
     buyp = cfg['system']['buy_percent']
-    return (buyp)
+    mpc = cfg['system']['max_per_coin']
+    mxw = cfg['system']['max_watchlist']
+    return (buyp,mpc,mxw)
 
 def whitelist_read():
     cfg = configparser.ConfigParser()
     cfg.read(file_cfg, encoding='utf-8')
     whl = cfg['system']['whitelist']
     return whl
-
-def isupdated_read():
-    cfg = configparser.ConfigParser()
-    cfg.read(file_cfg, encoding='utf-8')
-    wiu = cfg['system']['whitelist_is_updated']
-    return wiu
-
-def isupdated_write():
-    cfg = configparser.ConfigParser()
-    cfg.read(file_cfg, encoding='utf-8')
-    cfg.set('system','whitelist_is_updated','0')
-    with open(file_cfg, 'w', encoding='utf-8') as configfile:
-        cfg.write(configfile)
