@@ -45,9 +45,9 @@ def init_config():
     cfg['keys']['telegram_token'] = 'YOUR_TELEGRAM_TOKEN'
     cfg['keys']['telegram_mc'] = 'YOUR_TELEGRAM_MC'
     cfg['system'] = {}
-    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,XLM,ADA,EOS,BCH,GAS,FLOW,ETC,ZIL'
+    cfg['system']['whitelist']='BTC,ETH,XRP,ETC,XLM,ADA,EOS,BCH,GAS,FLOW,ETC'
     cfg['system']['whitelist_is_updated']='1'
-    cfg['system']['growth_period']='3'
+    cfg['system']['buy_percent']='0.1'
     cfg['system']['max_per_coin']='15000'
     cfg['system']['max_watchlist']='4'
     cfg['system']['term']='0.002'
@@ -74,6 +74,11 @@ def keys_read():
     tgm = cfg['keys']['telegram_mc']
     return (ack,sck,svu,tgt,tgm)
 
+def system_read():
+    cfg = configparser.ConfigParser()
+    cfg.read(file_cfg, encoding='utf-8')
+    buyp = cfg['system']['buy_percent']
+    return (buyp)
 
 def whitelist_read():
     cfg = configparser.ConfigParser()

@@ -17,7 +17,7 @@ def init():
     cfm.isupdated_write()
 
 def init_savedata():
-lgm.logmsg('Generating Saved_data file.','info')
-with open('saved_data.csv', 'w', newline='') as csvfile:
-    spamwriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
-    spamwriter.writerow(['', 'date', 'jonbeo', 'auto_upbit', 'difference_jonbeo_autoupbit' ,'difference_yesterday'])
+    lgm.logmsg('Generating Saved_data file.','info')
+    with open('saved_data.csv', 'w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        spamwriter.writerow(['', 'date', 'jonbeo', 'auto_upbit', 'difference_jonbeo_autoupbit' ,'difference_yesterday'])

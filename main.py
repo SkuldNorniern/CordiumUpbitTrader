@@ -1,4 +1,3 @@
-
 from modules import upbitmod as ubm
 from modules import loggermod as lgm
 from modules import configmod as cfm
@@ -14,5 +13,5 @@ if cfm.isupdated_read()=='1':
     lgm.logmsg('Updated coin dataset.','info')
 cfm.version_read()
 lgm.logmsg('Loading account data finished.','info')
-#ubm.init_account()
-ttm.trader()
+ubm.trader()
+#ttm.trader()
