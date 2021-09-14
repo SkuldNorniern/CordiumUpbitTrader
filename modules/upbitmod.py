@@ -167,9 +167,9 @@ def trader():
                 coin = get_balance(coins[i])
                 if ma15 / ma60 >= 1.0 and ma15 / ma60 <= 1.005 and ma15_pre < ma15 and ma15_pre < ma60:
                     monyy=krw*buy_percent
-                    if (krw*buy_percent) > 5500 and monyy<max_per_coin-amount and dsm.watching_list()<max_watchlist:
-                            if monyy > max_per_coin:
-                                monyy=max_per_coin
+                    if monyy > max_per_coin-amount:
+                        monyy=max_per_coin-amount
+                    if (monyy) > 5500 and monyy<max_per_coin-amount and dsm.watching_list()<max_watchlist:
                             msg="%s 의 15일 이동평균선이 60일 이동평균선을 넘어섰으므로 %d 원을 매수 합니다."%(coins[i],monyy)
                             lgm.logmsg(msg,'info')
                             bot.sendMessage(mc,msg)
@@ -179,7 +179,7 @@ def trader():
                         msg="%s 가 이미 %d 원 만큼 매수되어있어 매수하지 않습니다."%(coins[i],amount)
                         lgm.logmsg(msg,'info')
                         bot.sendMessage(mc,msg)
-                    elif  dsm.watching_list()>max_watchlist:
+                    elif  dsm.watching_list()-1>max_watchlist:
                         msg="설정한 동시 거래수 %d 개에 도달해 더이상 구매하지 않습니다."%(max_watchlist)
                         lgm.logmsg("msg,"'info')
                         bot.sendMessage(mc,msg)
@@ -191,13 +191,13 @@ def trader():
                         msg="%s 의 15일 이동평균선이 하락하여 매도합니다."%(coins[i])
                         lgm.logmsg(msg,'info')
                         bot.sendMessage(mc,msg)
-                        dsm.report_update(now,coins[i],"sell",round(coin),round(avg),current_price)
-                        upbit.sell_market_order(coin_list[i], coin)
-
+                        dsm.report_update(now,coins[i],"sell",coin,round(avg),current_price)
+                        if real_trade==True: upbit.sell_market_order(coin_list[i], coin)
+                        dsm.data_remove(coins[i])
                 msg="보유 %s : %f  %s/ 보유 원화 : %d 원 / 골든크로스 비율 : %f / 이전 15일 이동평균선과 가격차이 : %d 원 / 이전 15일 이동평균선과 변화비율 : %f"%(coins[i] ,float(coin),coins[i],int(krw),float( ma15 / ma60), int(ma15 - ma15_pre), float( ma15 / ma15_pre))
                 lgm.logmsg(msg,'info')
                 if(tt==True): bot.sendMessage(mc,msg)
-                if amount>0: dsm.data_update(coins[i],round(amount),round(coin))
+                if amount>0: dsm.data_update(coins[i],round(amount),coin)
                 time.sleep(1)
             tt=False
             time.sleep(45)

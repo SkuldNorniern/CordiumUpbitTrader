@@ -52,6 +52,26 @@ def data_update(coin_name,avg,hold):
         wr.writerow([coin_name,avg,hold])
         f.close()
 
+def data_remove(coin_name):
+    lgm.logmsg('Updating dataset.','info')
+    f = open('dataset.csv', 'r', newline='')
+    rd=csv.reader(f)
+    is_here=False
+    lines=[]
+    for i in rd:
+        if i[0] !=coin_name:
+            lines.append(i)
+    if is_here==True:
+        f = open('dataset.csv', 'w', newline='')
+        wr=csv.writer(f)
+        wr.writerows(lines)
+        f.close()
+    else :
+        f = open('dataset.csv', 'a', newline='')
+        wr=csv.writer(f)
+        wr.writerow([coin_name,avg,hold])
+        f.close()
+
 def report_update(date,coin_name,action,amount,avg,balance):
     lgm.logmsg('Updating report.','info')
     f = open('saved_report.csv', 'a', newline='')
@@ -63,5 +83,9 @@ def watching_list():
     lgm.logmsg('Reading dataset.','info')
     f = open('dataset.csv', 'r', newline='')
     rd=csv.reader(f)
-    lgm.logmsg(len(rd))
-    return len(rd)
+    lines=[]
+    for i in rd:
+        lines.append(i)
+    msg='Count of Watchlist is %d.'%(len(lines))
+    lgm.logmsg(msg,'debug')
+    return len(lines)
