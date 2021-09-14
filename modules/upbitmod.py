@@ -191,9 +191,10 @@ def trader():
                         msg="%s 의 15일 이동평균선이 하락하여 매도합니다."%(coins[i])
                         lgm.logmsg(msg,'info')
                         bot.sendMessage(mc,msg)
+                        dsm.data_remove(coins[i])
                         dsm.report_update(now,coins[i],"sell",coin,round(avg),current_price)
                         if real_trade==True: upbit.sell_market_order(coin_list[i], coin)
-                        dsm.data_remove(coins[i])
+
                 msg="보유 %s : %f  %s/ 보유 원화 : %d 원 / 골든크로스 비율 : %f / 이전 15일 이동평균선과 가격차이 : %d 원 / 이전 15일 이동평균선과 변화비율 : %f"%(coins[i] ,float(coin),coins[i],int(krw),float( ma15 / ma60), int(ma15 - ma15_pre), float( ma15 / ma15_pre))
                 lgm.logmsg(msg,'info')
                 if(tt==True): bot.sendMessage(mc,msg)
