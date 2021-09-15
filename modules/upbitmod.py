@@ -191,7 +191,6 @@ def trader():
                         msg="%s 의 15일 이동평균선이 하락하여 매도합니다."%(coins[i])
                         lgm.logmsg(msg,'info')
                         bot.sendMessage(mc,msg)
-                        dsm.data_remove(coins[i])
                         dsm.report_update(now,coins[i],"sell",coin,round(avg),current_price)
                         if real_trade==True: upbit.sell_market_order(coin_list[i], coin)
 
@@ -199,6 +198,7 @@ def trader():
                 lgm.logmsg(msg,'info')
                 if(tt==True): bot.sendMessage(mc,msg)
                 if amount>0: dsm.data_update(coins[i],round(amount),coin)
+                if amount==0:dsm.data_remove(coins[i])
                 time.sleep(1)
             tt=False
             time.sleep(45)

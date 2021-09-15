@@ -53,12 +53,15 @@ def data_update(coin_name,avg,hold):
         f.close()
 
 def data_remove(coin_name):
-    lgm.logmsg('Updating dataset.','info')
+    lgm.logmsg('Checking data for removal from dataset.','info')
     f = open('dataset.csv', 'r', newline='')
     rd=csv.reader(f)
     lines=[]
     for i in rd:
-        if i[0] !=coin_name: lines.append(i)
+        if i[0] !=coin_name:
+            lines.append(i)
+            msg = "chk %s to %s"%(coin_name,i[0])
+            lgm.logmsg(msg,"debug")
     f = open('dataset.csv', 'w', newline='')
     wr=csv.writer(f)
     wr.writerows(lines)
