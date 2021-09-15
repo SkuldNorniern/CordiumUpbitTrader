@@ -12,10 +12,6 @@ from modules import configmod as cfm
 from modules import datasetmod as dsm
 import requests
 
-access_key = ''
-secret_key = ''
-server_url = ''
-buy_percent=0
 coin_list = []
 coins=[]
 upbit = ''
@@ -57,9 +53,6 @@ def trader():
             bot.sendMessage(mc,'Auto Trader Online')
 
         lgm.logmsg('Sended message from telegram bot','info')
-
-
-        #trader(access_key,secret_key,server_url,token,mc)
 
     def get_target_price(ticker, k):
         df = pyupbit.get_ohlcv(ticker, interval="day", count=2)
@@ -120,8 +113,6 @@ def trader():
                     return (0,0)
         return (0,0)
 
-    #dfc = pd.read_csv('dataset.csv')
-    #dfc2 = pd.DataFrame(columns=['date','jonbeo','auto_upbit','difference_jonbeo_autoupbit'])
     check_account()
     access_key,secret_key,server_url,token,mc = cfm.keys_read()
     upbit=pyupbit.Upbit(access_key,secret_key)
@@ -198,7 +189,7 @@ def trader():
                 lgm.logmsg(msg,'info')
                 if(tt==True): bot.sendMessage(mc,msg)
                 if amount>0: dsm.data_update(coins[i],round(amount),coin)
-                if amount==0:dsm.data_remove(coins[i])
+                if amount==0 and dsm.watching_list()>0:dsm.data_remove(coins[i])
                 time.sleep(1)
             tt=False
             time.sleep(45)

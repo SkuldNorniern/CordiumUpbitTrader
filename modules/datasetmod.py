@@ -62,6 +62,8 @@ def data_remove(coin_name):
             lines.append(i)
             msg = "chk %s to %s"%(coin_name,i[0])
             lgm.logmsg(msg,"debug")
+        else:
+            lgm.logmsg(coin_name,"debug")
     f = open('dataset.csv', 'w', newline='')
     wr=csv.writer(f)
     wr.writerows(lines)

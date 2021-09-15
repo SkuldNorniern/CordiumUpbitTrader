@@ -1,6 +1,5 @@
 import configparser
 from modules import loggermod as lgm
-#from modules import datasetmod as dsm
 from time import strftime
 import os.path
 file_ifd = 'infodata.dat'
