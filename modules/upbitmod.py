@@ -139,7 +139,7 @@ def trader():
     while True:
         try:
             now = datetime.datetime.now()
-            if (now.hour % 3) == 0 and tt==False and now.minute==0:
+            if (now.hour % 3) == 0 and tt==False and now.minute<=1:
                 tt=True
                 msg = f"지금 {now.hour}시입니다. 코드가 잘 실행되고 있습니다."
                 lgm.logmsg(msg,'info')
@@ -160,7 +160,7 @@ def trader():
                     monyy=krw*buy_percent
                     if monyy > max_per_coin-amount:
                         monyy=max_per_coin-amount
-                    if (monyy) > 5500 and monyy<max_per_coin-amount and dsm.watching_list()<max_watchlist:
+                    if (monyy > 5500) and monyy<=max_per_coin-amount and dsm.watching_list()<max_watchlist:
                             msg="%s 의 15일 이동평균선이 60일 이동평균선을 넘어섰으므로 %d 원을 매수 합니다."%(coins[i],monyy)
                             lgm.logmsg(msg,'info')
                             bot.sendMessage(mc,msg)
@@ -176,6 +176,7 @@ def trader():
                         bot.sendMessage(mc,msg)
                     else:
                         lgm.logmsg("돈이 부족합니다.",'info')
+                        bot.sendMessage(mc,"돈이 부족합니다.")
 
                 else:
                     if ma15 / ma15_pre < 0.99975 and ma15 / ma60 >= 1.005 and coin>0:
@@ -187,12 +188,12 @@ def trader():
 
                 msg="보유 %s : %f  %s/ 보유 원화 : %d 원 / 골든크로스 비율 : %f / 이전 15일 이동평균선과 가격차이 : %d 원 / 이전 15일 이동평균선과 변화비율 : %f"%(coins[i] ,float(coin),coins[i],int(krw),float( ma15 / ma60), int(ma15 - ma15_pre), float( ma15 / ma15_pre))
                 lgm.logmsg(msg,'info')
-                if(tt==True): bot.sendMessage(mc,msg)
+                if tt==True and  amount>0: bot.sendMessage(mc,msg)
                 if amount>0: dsm.data_update(coins[i],round(amount),coin)
                 if amount==0 and dsm.watching_list()>0:dsm.data_remove(coins[i])
                 time.sleep(1)
             tt=False
-            time.sleep(45)
+            time.sleep(30)
 
         except Exception as e:
             lgm.logmsg(e,'err')
