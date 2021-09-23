@@ -17,6 +17,11 @@ def init():
     else:
         init_savereport()
 
+def check():
+    if os.path.exists(file_dts) and os.path.exists(file_svr) :
+        return "pass"
+    return "fail"
+    
 def init_dataset():
     lgm.logmsg('Generating dataset.','warn')
     with open('dataset.csv', 'w', newline='') as csvfile:
