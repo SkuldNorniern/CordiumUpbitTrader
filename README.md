@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/SkuldNorniern/CordiumUpbitTrader/tree/main.svg?style=svg)](https://circleci.com/gh/SkuldNorniern/CordiumUpbitTrader/tree/main)
+---
 # CordiumUpbitTrader
  ## Use it at your OWN RISK!!!!
 
