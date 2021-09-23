@@ -1,5 +1,6 @@
 import os
 import jwt
+import sys
 import uuid
 import json
 import time
@@ -26,11 +27,13 @@ def trader():
 
         if access_key =="YOUR_ACCESS_KEY":
             lgm.logmsg("Enter Your Upbit ACCESS KEY","cric")
+            sys.exit()
         else :
             msg="Access key "+access_key+ " loaded."
             lgm.logmsg(msg,"debug")
         if secret_key =="YOUR_SECRET_KEY":
             lgm.logmsg("Enter Your Upbit SECRET KEY","cric")
+            sys.exit()
         else :
             msg="Access key "+access_key+ " loaded."
             lgm.logmsg(msg,"debug")
@@ -40,12 +43,14 @@ def trader():
 
         if token =="YOUR_TELEGRAM_TOKEN":
             lgm.logmsg("Enter Your telegram TOKEN","cric")
+            sys.exit()
         else :
             msg="Telegram bot token "+token+ " loaded."
             lgm.logmsg(msg,"debug")
 
         if secret_key =="YOUR_TELEGRAM_MC":
             lgm.logmsg("Enter Your Telegram MC","cric")
+            sys.exit()
         else :
             msg="Telegram userid "+mc+ " loaded."
             lgm.logmsg(msg,"debug")
