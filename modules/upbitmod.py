@@ -14,49 +14,49 @@ import requests
 
 coin_list = []
 coins=[]
-upbit = ''
-token = ''
-mc = ''
+upbit = ""
+token = ""
+mc = ""
 bot = 0
 
 def trader():
     def check_account():
-        lgm.logmsg('Loading accounts data.','info')
+        lgm.logmsg("Loading accounts data.","info")
         access_key,secret_key,server_url,token,mc = cfm.keys_read()
 
-        if access_key =='YOUR_ACCESS_KEY':
-            lgm.logmsg('Enter Your Upbit ACCESS KEY','cric')
+        if access_key =="YOUR_ACCESS_KEY":
+            lgm.logmsg("Enter Your Upbit ACCESS KEY","cric")
         else :
-            msg='Access key '+access_key+ ' loaded.'
-            lgm.logmsg(msg,'debug')
-        if secret_key =='YOUR_SECRET_KEY':
-            lgm.logmsg('Enter Your Upbit SECRET KEY','cric')
+            msg="Access key "+access_key+ " loaded."
+            lgm.logmsg(msg,"debug")
+        if secret_key =="YOUR_SECRET_KEY":
+            lgm.logmsg("Enter Your Upbit SECRET KEY","cric")
         else :
-            msg='Access key '+access_key+ ' loaded.'
-            lgm.logmsg(msg,'debug')
+            msg="Access key "+access_key+ " loaded."
+            lgm.logmsg(msg,"debug")
 
-        msg='Server url '+server_url+ ' loaded.'
-        lgm.logmsg(msg,'debug')
+        msg="Server url "+server_url+ " loaded."
+        lgm.logmsg(msg,"debug")
 
-        if token =='YOUR_TELEGRAM_TOKEN':
-            lgm.logmsg('Enter Your telegram TOKEN','cric')
+        if token =="YOUR_TELEGRAM_TOKEN":
+            lgm.logmsg("Enter Your telegram TOKEN","cric")
         else :
-            msg='Telegram bot token '+token+ ' loaded.'
-            lgm.logmsg(msg,'debug')
+            msg="Telegram bot token "+token+ " loaded."
+            lgm.logmsg(msg,"debug")
 
-        if secret_key =='YOUR_TELEGRAM_MC':
-            lgm.logmsg('Enter Your Telegram MC','cric')
+        if secret_key =="YOUR_TELEGRAM_MC":
+            lgm.logmsg("Enter Your Telegram MC","cric")
         else :
-            msg='Telegram userid '+mc+ ' loaded.'
-            lgm.logmsg(msg,'debug')
+            msg="Telegram userid "+mc+ " loaded."
+            lgm.logmsg(msg,"debug")
             bot=telegram.Bot(token)
-            bot.sendMessage(mc,'Auto Trader Online')
+            bot.sendMessage(mc,"Auto Trader Online")
 
-        lgm.logmsg('Sended message from telegram bot','info')
+        lgm.logmsg("Sended message from telegram bot","info")
 
     def get_target_price(ticker, k):
         df = pyupbit.get_ohlcv(ticker, interval="day", count=2)
-        target_price = df.iloc[0]['close'] + (df.iloc[0]['high'] - df.iloc[0]['low']) * k
+        target_price = df.iloc[0]["close"] + (df.iloc[0]["high"] - df.iloc[0]["low"]) * k
         return target_price
 
     def get_current_price(ticker):
@@ -69,36 +69,36 @@ def trader():
     def get_ma7_pre(ticker):
         pre = datetime.datetime.now() - datetime.timedelta(minutes=5)
         df = pyupbit.get_ohlcv(ticker, interval="minute5", count=15, to= pre)
-        ma15 = df['close'].rolling(7).mean().iloc[-1]
+        ma15 = df["close"].rolling(7).mean().iloc[-1]
         return ma15
 
     def get_ma7(ticker):
         df = pyupbit.get_ohlcv(ticker, interval="minute5", count=15)
-        ma15 = df['close'].rolling(7).mean().iloc[-1]
+        ma15 = df["close"].rolling(7).mean().iloc[-1]
         return ma15
 
     def get_ma15(ticker):
         df = pyupbit.get_ohlcv(ticker, interval="minute5", count=15)
-        ma15 = df['close'].rolling(15).mean().iloc[-1]
+        ma15 = df["close"].rolling(15).mean().iloc[-1]
         return ma15
 
     def get_ma15_pre(ticker):
         pre = datetime.datetime.now() - datetime.timedelta(minutes=5)
         df = pyupbit.get_ohlcv(ticker, interval="minute5", count=15, to= pre)
-        ma15 = df['close'].rolling(15).mean().iloc[-1]
+        ma15 = df["close"].rolling(15).mean().iloc[-1]
         return ma15
 
     def get_ma60(ticker):
         df = pyupbit.get_ohlcv(ticker, interval="minute5", count=60)
-        ma15 = df['close'].rolling(60).mean().iloc[-1]
+        ma15 = df["close"].rolling(60).mean().iloc[-1]
         return ma15
 
     def get_balance(ticker):
         balances = upbit.get_balances()
         for b in balances:
-            if b['currency'] == ticker:
-                if b['balance'] is not None:
-                    return float(b['balance'])
+            if b["currency"] == ticker:
+                if b["balance"] is not None:
+                    return float(b["balance"])
                 else:
                     return 0
         return 0
@@ -106,9 +106,9 @@ def trader():
     def get_amount(ticker):
         balances = upbit.get_balances()
         for b in balances:
-            if b['currency'] == ticker:
-                if b['balance'] is not None:
-                    return (float(b['balance'])*float(b['avg_buy_price']),float(b['avg_buy_price']))
+            if b["currency"] == ticker:
+                if b["balance"] is not None:
+                    return (float(b["balance"])*float(b["avg_buy_price"]),float(b["avg_buy_price"]))
                 else:
                     return (0,0)
         return (0,0)
@@ -117,22 +117,22 @@ def trader():
     access_key,secret_key,server_url,token,mc = cfm.keys_read()
     upbit=pyupbit.Upbit(access_key,secret_key)
     whl = cfm.whitelist_read()
-    coin_list = whl.split(',')
+    coin_list = whl.split(",")
     n = len(coin_list)
-    coins=whl.split(',')
-    msg='whitelist '+whl+ ' loaded.'
-    lgm.logmsg(msg,'info')
+    coins=whl.split(",")
+    msg="whitelist "+whl+ " loaded."
+    lgm.logmsg(msg,"info")
 
     bot=telegram.Bot(token)
     buy_percent,max_per_coin,max_watchlist,real_trade=cfm.system_read()
-    if real_trade=='True' : real_trade=True
+    if real_trade=="True" : real_trade=True
     else : real_trade=False
     buy_percent=float(buy_percent)
     max_per_coin=int(max_per_coin)
     max_watchlist=int(max_watchlist)
-    lgm.logmsg('Loaded System data.','info')
+    lgm.logmsg("Loaded System data.","info")
     for i in range(n):
-        coin_list[i]='KRW-'+coin_list[i]
+        coin_list[i]="KRW-"+coin_list[i]
         coin_list[i]=str(coin_list[i])
         coins[i]=str(coins[i])
     tt=True
@@ -142,11 +142,11 @@ def trader():
             if (now.hour % 3) == 0 and tt==False and now.minute<=1:
                 tt=True
                 msg = f"지금 {now.hour}시입니다. 코드가 잘 실행되고 있습니다."
-                lgm.logmsg(msg,'info')
+                lgm.logmsg(msg,"info")
                 bot.sendMessage(mc,msg)
-            krw = get_balance('KRW')
-            msg='Balance Loaded : %d'%(krw)
-            lgm.logmsg(msg,'info')
+            krw = get_balance("KRW")
+            msg="Balance Loaded : %d"%(krw)
+            lgm.logmsg(msg,"info")
             for i in range(n):
                 start_time = get_start_time(coin_list[i])
                 end_time = start_time + datetime.timedelta(days=1)
@@ -162,32 +162,41 @@ def trader():
                         monyy=max_per_coin-amount
                     if (monyy > 5500) and monyy<=max_per_coin-amount and dsm.watching_list()<max_watchlist:
                             msg="%s 의 15일 이동평균선이 60일 이동평균선을 넘어섰으므로 %d 원을 매수 합니다."%(coins[i],monyy)
-                            lgm.logmsg(msg,'info')
+                            lgm.logmsg(msg,"info")
                             bot.sendMessage(mc,msg)
                             if real_trade==True:  upbit.buy_market_order(coin_list[i], krw*buy_percent)
                             dsm.report_update(now,coins[i],"buy",monyy,"N/A",krw-monyy)
                     elif monyy>max_per_coin-amount:
                         msg="%s 가 이미 %d 원 만큼 매수되어있어 매수하지 않습니다."%(coins[i],amount)
-                        lgm.logmsg(msg,'info')
+                        lgm.logmsg(msg,"info")
                         bot.sendMessage(mc,msg)
                     elif  dsm.watching_list()>max_watchlist:
                         msg="설정한 동시 거래수 %d 개에 도달해 더이상 구매하지 않습니다."%(max_watchlist)
-                        lgm.logmsg("msg,"'info')
+                        lgm.logmsg("msg,""info")
                         bot.sendMessage(mc,msg)
                     else:
-                        lgm.logmsg("돈이 부족합니다.",'info')
-                        bot.sendMessage(mc,"돈이 부족합니다.")
+                        msg= "%s 를 사기에 %d 로는 돈이 부족합니다."%(coins[i],monyy)
+                        lgm.logmsg(msg,"info")
+                        bot.sendMessage(msg,"돈이 부족합니다.")
 
                 else:
-                    if ma15 / ma15_pre < 0.99975 and ma15 / ma60 >= 1.005 and coin>0:
+                    msg = "Sell sign calcluating sign 1 : %f sign 2 %f"%((ma15 / ma15_pre),(ma15 / ma60))
+                    lgm.logmsg(msg,"debug")
+                    if ma15 / ma15_pre < 0.99975 and ma15 / ma60 >= 1.006 and coin>0:
                         msg="%s 의 15일 이동평균선이 하락하여 매도합니다."%(coins[i])
-                        lgm.logmsg(msg,'info')
+                        lgm.logmsg(msg,"info")
+                        bot.sendMessage(mc,msg)
+                        dsm.report_update(now,coins[i],"sell",coin,round(avg),current_price)
+                        if real_trade==True: upbit.sell_market_order(coin_list[i], coin)
+                    elif ma15 / ma15_pre < 0.99965   and ma15 / ma60 <= 0.985 and coin>0:
+                        msg="%s 를 손절합니다."%(coins[i])
+                        lgm.logmsg(msg,"info")
                         bot.sendMessage(mc,msg)
                         dsm.report_update(now,coins[i],"sell",coin,round(avg),current_price)
                         if real_trade==True: upbit.sell_market_order(coin_list[i], coin)
 
                 msg="보유 %s : %f  %s/ 보유 원화 : %d 원 / 골든크로스 비율 : %f / 이전 15일 이동평균선과 가격차이 : %d 원 / 이전 15일 이동평균선과 변화비율 : %f"%(coins[i] ,float(coin),coins[i],int(krw),float( ma15 / ma60), int(ma15 - ma15_pre), float( ma15 / ma15_pre))
-                lgm.logmsg(msg,'info')
+                lgm.logmsg(msg,"info")
                 if tt==True and  amount>0: bot.sendMessage(mc,msg)
                 if amount>0: dsm.data_update(coins[i],round(amount),coin)
                 if amount==0 and dsm.watching_list()>0:dsm.data_remove(coins[i])
@@ -196,5 +205,5 @@ def trader():
             time.sleep(30)
 
         except Exception as e:
-            lgm.logmsg(e,'err')
+            lgm.logmsg(e,"err")
             time.sleep(15)
